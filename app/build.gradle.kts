@@ -80,5 +80,4 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0-beta01")
 
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
-
 }
