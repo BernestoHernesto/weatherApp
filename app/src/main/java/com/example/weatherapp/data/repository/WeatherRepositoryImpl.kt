@@ -5,7 +5,7 @@ import com.example.weatherapp.data.mapper.toWeatherData
 import com.example.weatherapp.data.remote.WeatherApi
 import com.example.weatherapp.domain.model.Coordinates
 import com.example.weatherapp.domain.model.WeatherData
-import com.example.weatherapp.domain.repository.WeatherRepository
+import com.example.weatherapp.repository.WeatherRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -16,13 +16,14 @@ import javax.inject.Inject
 class WeatherRepositoryImpl @Inject constructor(
     private val weatherApi: WeatherApi,
 ) : WeatherRepository {
-    private val refreshIntervalMs: Long = 1000L
+
+    private val refreshIntervalMs: Long = 10000L
 
     override fun getWeatherData(): Flow<Result<WeatherData>> {
         return flow {
             while (true) {
                 getWeatherCoordinates().forEach {
-                    emit(Result.Loading(true))
+                    emit(Result.Loading)
                     try {
                         val weatherData = weatherApi.getWeatherData(
                             latitude = it.latitude,
@@ -32,9 +33,8 @@ class WeatherRepositoryImpl @Inject constructor(
                         emit(Result.Success(weatherData))
                     } catch (e: Exception) {
                         e.printStackTrace()
-                        emit(Result.Error(e.message ?: "An error occurred."))
+                        emit(Result.Error(e))
                     }
-                    emit(Result.Loading(false))
                     delay(refreshIntervalMs)
                 }
             }

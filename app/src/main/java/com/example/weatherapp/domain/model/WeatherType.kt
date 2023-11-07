@@ -1,17 +1,12 @@
 package com.example.weatherapp.domain.model
 
-import androidx.annotation.DrawableRes
-import com.example.weatherapp.R
-
-enum class WeatherType(
-    @DrawableRes val iconRes: Int
-) {
-    CLEAR_SKY(iconRes = R.drawable.ic_sunny),
-    CLOUDY(iconRes = R.drawable.ic_cloudy),
-    DRIZZLE(iconRes = R.drawable.ic_rainy),
-    RAIN(iconRes = R.drawable.ic_rainy),
-    SNOW(iconRes = R.drawable.ic_snowy),
-    THUNDER(iconRes = R.drawable.ic_thunder);
+enum class WeatherType {
+    CLEAR_SKY,
+    CLOUDY,
+    DRIZZLE,
+    RAIN,
+    SNOW,
+    THUNDER;
 
     companion object {
         fun fromWMO(code: Int): WeatherType {

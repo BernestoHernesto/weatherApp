@@ -1,4 +1,4 @@
-package com.example.weatherapp.domain.repository
+package com.example.weatherapp.repository
 
 import com.example.weatherapp.domain.model.Coordinates
 import com.example.weatherapp.util.Result

@@ -21,76 +21,89 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weatherapp.R
+import com.example.weatherapp.domain.model.WeatherType
+import com.example.weatherapp.domain.model.WeatherData
 
 @Composable
 fun WeatherCard(
-    state: WeatherUiState,
+    state: WeatherData?,
     modifier: Modifier = Modifier
 ) {
-    val currentUnits =  state.weatherData?.currentUnits
-    state.weatherData?.current?.let { data ->
-        Card(
-            colors = CardDefaults.cardColors(),
-            shape = RoundedCornerShape(10.dp),
-            modifier = modifier.padding(16.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
+
+    Card(
+        colors = CardDefaults.cardColors(),
+        shape = RoundedCornerShape(10.dp),
+        modifier = modifier.padding(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            state?.current?.weatherType?.let {
                 Image(
-                    painter = painterResource(id = data.weatherType.iconRes),
+                    painter = painterResource(id = getDrawableResourceForWeatherType(it)),
                     contentDescription = null,
                     modifier = Modifier.size(
                         width = 90.dp, height = 90.dp
                     )
                 )
-                Spacer(modifier = Modifier.width(32.dp))
-                Row {
-                    Text(
-                        text = "${data.temperature}",
-                        fontSize = 50.sp,
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold,
-                    )
-                    Text(
-                        text = "${currentUnits?.temperature}",
-                        fontSize = 24.sp,
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold,
-                    )
-                }
             }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Spacer(modifier = Modifier.width(32.dp))
+            Row {
                 Text(
-                    text = stringResource(id = R.string.weather_humidity),
-                    fontSize = 20.sp,
+                    text = "${state?.current?.temperature}",
+                    fontSize = 50.sp,
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
                 )
-                Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = "${data.humidity}",
-                    fontSize = 20.sp,
+                    text = "${state?.currentUnits?.temperature}",
+                    fontSize = 24.sp,
                     color = Color.Black,
-                    fontWeight = FontWeight.Light,
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = "${currentUnits?.humidity}",
-                    fontSize = 16.sp,
-                    color = Color.Black,
-                    fontWeight = FontWeight.Light,
+                    fontWeight = FontWeight.Bold,
                 )
             }
         }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(id = R.string.weather_humidity),
+                fontSize = 20.sp,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = "${state?.current?.humidity}",
+                fontSize = 20.sp,
+                color = Color.Black,
+                fontWeight = FontWeight.Light,
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = "${state?.currentUnits?.humidity}",
+                fontSize = 16.sp,
+                color = Color.Black,
+                fontWeight = FontWeight.Light,
+            )
+        }
+    }
+}
+
+fun getDrawableResourceForWeatherType(weatherType: WeatherType): Int {
+    return when (weatherType) {
+        WeatherType.CLEAR_SKY -> R.drawable.ic_sunny
+        WeatherType.CLOUDY -> R.drawable.ic_cloudy
+        WeatherType.DRIZZLE -> R.drawable.ic_rainy
+        WeatherType.RAIN -> R.drawable.ic_rainy
+        WeatherType.SNOW -> R.drawable.ic_snowy
+        WeatherType.THUNDER -> R.drawable.ic_thunder
     }
 }
